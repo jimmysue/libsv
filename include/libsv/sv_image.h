@@ -10,17 +10,13 @@ extern "C" {
 #define SV_IMAGE_MAX_CHANNEL    3
 
 /// format bit layout
-/// 0        8       16      24      32
-/// | code   | GRAY  |      bbp      |
+/// 0      8      16     24     32
+/// |  id  | Ybpp | Ubpp | Vbpp | 
 
-#define SV_PIX_FMT_GRAY
-
-#define SV_PIX_FMT_HAS_GRAY(fmt) (fmt &  0x 0000FF00)
-
-#define SV_MAKE_PIX_FMT(code, Ybpp, Ubpp, Vbpp) (Ybpp | (Ubpp << 8) | (Vbpp << 16) | (code << 24))
-#define SV_PIX_FMT_YBPP(fmt) (fmt & 0x000000ff)
-#define SV_PIX_FMT_UBPP(fmt) ((fmt & 0x0000ff00) >> 8)
-#define SV_PIX_FMT_VBPP(fmt) ((fmt & 0x00ff0000) >> 16)
+#define SV_MAKE_PIX_FMT(id, Ybpp, Ubpp, Vbpp) (Ybpp | (Ubpp << 8) | (Vbpp << 16) | (id << 24))
+#define SV_GET_FMT_YBPP(fmt) (fmt & 0x000000ff)
+#define SV_GET_FMT_UBPP(fmt) ((fmt & 0x0000ff00) >> 8)
+#define SV_GET_FMT_VBPP(fmt) ((fmt & 0x00ff0000) >> 16)
 
 
 enum{

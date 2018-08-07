@@ -29,9 +29,9 @@ sv_image_t * sv_image_create(int width, int height, int fmt, int orient)
         return nullptr;
     }
 
-    int ybpp = SV_PIX_FMT_YBPP(fmt);
-    int ubpp = SV_PIX_FMT_UBPP(fmt);
-    int vbpp = SV_PIX_FMT_VBPP(fmt);
+    int ybpp = SV_GET_FMT_YBPP(fmt);
+    int ubpp = SV_GET_FMT_UBPP(fmt);
+    int vbpp = SV_GET_FMT_VBPP(fmt);
 
     int num_pixel = width * height;
 
@@ -92,9 +92,9 @@ sv_image_t * sv_image_clone(const sv_image_t* src)
     }
     const int fmt = image->format;
     const int width = image->width, height = image->height;
-    int ybpp = SV_PIX_FMT_YBPP(fmt);
-    int ubpp = SV_PIX_FMT_UBPP(fmt);
-    int vbpp = SV_PIX_FMT_VBPP(fmt);
+    int ybpp = SV_GET_FMT_YBPP(fmt);
+    int ubpp = SV_GET_FMT_UBPP(fmt);
+    int vbpp = SV_GET_FMT_VBPP(fmt);
 
     int num_pixel = width * height;
 
@@ -119,9 +119,9 @@ void sv_image_copyTo(const sv_image_t* src, sv_image_t* dst)
     if (sv_image_capacity(dst) >= sv_image_size(src)){
         
         int num_pixel = src->width * src->height;
-        int ysize = SV_PIX_FMT_YBPP(src->format) * num_pixel / 8;
-        int usize = SV_PIX_FMT_UBPP(src->format) * num_pixel / 8;
-        int vsize = SV_PIX_FMT_VBPP(src->format) * num_pixel / 8;
+        int ysize = SV_GET_FMT_YBPP(src->format) * num_pixel / 8;
+        int usize = SV_GET_FMT_UBPP(src->format) * num_pixel / 8;
+        int vsize = SV_GET_FMT_VBPP(src->format) * num_pixel / 8;
 
         memcpy(dst->y, src->y, ysize);
         dst->u = dst->y + ysize;
@@ -168,9 +168,9 @@ int sv_image_size(const sv_image_t* image)
     const int fmt = image->format;
     const int width = image->width;
     const int height = image->height;
-    const int ybpp = SV_PIX_FMT_YBPP(fmt);
-    const int ubpp = SV_PIX_FMT_UBPP(fmt);
-    const int vbpp = SV_PIX_FMT_VBPP(fmt);
+    const int ybpp = SV_GET_FMT_YBPP(fmt);
+    const int ubpp = SV_GET_FMT_UBPP(fmt);
+    const int vbpp = SV_GET_FMT_VBPP(fmt);
 
     const int num_pixel = width * height;
 
