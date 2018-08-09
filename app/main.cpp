@@ -1,19 +1,17 @@
 #include "libsv/sv_image.h"
+#include "libsv/sv_codec.h"
+
+#include "opencv2/highgui/highgui.hpp"
 
 int main(int argc, char** argv)
 {
-    sv_image_t *image = sv_image_create(100, 100, SV_PIX_FMT_BGR888, 1);
+    sv_image_t *image = sv_imread("images/image.jpg");
 
-    sv_image_str(image);
+    int components = SV_GET_FMT_YBPP(image->format) / 8;
+    cv::Mat cvimage(image->height, image->width, CV_8UC(components), image->data);
 
-    sv_image_destroy(image);
-
-    sv_image_t *image2 = sv_image_create();
-
-    sv_image_str(image2);
-
-    sv_image_swap(image2, image);
-    
+    cv::imshow("debug", cvimage);
+    cv::waitKey();
 
     return 0;
 }

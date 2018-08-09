@@ -21,8 +21,7 @@ FILE ( GLOB_RECURSE	ly_unittest_sources ${ly_tst_dir}/*.cc )
 LIST ( SORT			ly_unittest_sources )
 
 INCLUDE_DIRECTORIES( BEFORE ${ly_inc_dir} )
-
-# this creates the static library (.a)
+set (SV_INCLUDE_DIR  "${ly_inc_dir}"  CACHE INTERNAL "DIRS" )
 ADD_LIBRARY				( ${ly_lib_static} STATIC ${ly_source_files} )
 
 # # this creates the shared library (.so)

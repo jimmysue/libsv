@@ -1,19 +1,23 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(sjz-vision)
+project(libsv)
 
-set(DEPS_INCLUDE_DIRS "" cache)
-set(var "" cache)
-# third party
+set(LibSV_SOURCE_DIR ${CMAKE_SOURCE_DIR})
+set(LibSV_BINARY_DIR ${CMAKE_BINARY_DIR})
+
+
+include("cmake/sv_utils.cmake")
+
 add_subdirectory(3rdparty/libyuv)
-
+add_subdirectory(3rdparty/libjpeg-turbo)
 
 list(APPEND CMAKE_CXX_FLAGS "-std=c++11")
 
+sv_debug_message("--- ${SV_INCLUDE_DIR}")
 
 include_directories(
-    "${CMAKE_SOURCE_DIR}/3rdparty/libyuv/include"
     "${CMAKE_SOURCE_DIR}/include"
+    "${SV_INCLUDE_DIR}"
  )
 
 file(GLOB SV_SOURCES
@@ -30,6 +34,7 @@ add_library(sv ${SV_SOURCES} ${SV_HEADERS})
 target_link_libraries(
    sv
    yuv
+   jpeg-static
 )
 
 # demo

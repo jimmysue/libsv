@@ -53,8 +53,8 @@ sv_image_t * sv_image_create(int width, int height, int fmt, int orient)
     image->refcount = (int*) (data + ysize + usize + vsize);
     image->data = data;
     image->ystride = ybpp * width / 8;
-    image->ustride = ubpp * width / 8;
-    image->vstride = vbpp * width / 8;
+    image->ustride = ubpp * width / 4;
+    image->vstride = vbpp * width / 4;
     
     (*image->refcount) = 1;
 
@@ -178,6 +178,38 @@ int sv_image_size(const sv_image_t* image)
     const int usize = num_pixel * ubpp / 8;
     const int vsize = num_pixel * vbpp / 8;
     return ysize + usize + vsize;
+}
+
+sv_image_t * sv_image_roi(const sv_image_t* image, int x, int y, int width, int height)
+{
+    assert(x >= 0);
+    assert(y >= 0);
+    assert(width >0);
+    assert(height > 0);
+    assert(x + width <= image->width);
+    assert(y + height <= image->height);
+
+    sv_image_t * result = new (std::nothrow) sv_image_t;
+
+    if ( !result ) return result;
+
+    *result = *image;
+
+    if ( image->y ){
+        result->y = image->y + y * image->ystride + x * image->ystride / image->width;
+    }
+    
+    if ( image->u ){
+        result->u = image->u + y * image->ustride + x * image->ustride / image->width;
+    }
+    
+    if ( image->v ){
+        result->v = image->v + y * image->vstride + x * image->vstride / image->width;
+    }
+
+    result->refcount = nullptr;
+
+    return result;
 }
 
 /// debug utilities

@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/build/app/driver",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/workspace",
             "environment": [],
             "externalConsole": true,
             "MIMode": "lldb"
