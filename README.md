@@ -1,3 +1,5 @@
-# sjz-vision
+# libsv
+
+libsv denotes Sjz's Vision LIBrary
 
 ## 
