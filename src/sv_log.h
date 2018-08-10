@@ -7,6 +7,14 @@
 #include <time.h>
 #include <string.h>
 
+#ifdef __ANDROID__
+#include <android/log.h>
+#endif
+
+#ifndef LOGTAG
+#define LOGTAG "libsv"
+#endif
+
 static inline char *timenow();
 
 #define _FILE strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__
@@ -20,10 +28,11 @@ static inline char *timenow();
 #define LOG_LEVEL   DEBUG_LEVEL
 #endif
 
-#define PRINTFUNCTION(format, ...)      objc_print(@format, __VA_ARGS__)
+#ifdef __ANDROID__
+// TODO android support
+#define PRINTFUNCTION(format, ...)     __android_log_print(ANDROID_LOG_INFO, LOGTAG, "My Log", 1); 
 #else
 #define PRINTFUNCTION(format, ...)      fprintf(stderr, format, __VA_ARGS__)
-
 #endif
 
 #define LOG_FMT             "%s | %-7s | %-15s | %s:%d | "
