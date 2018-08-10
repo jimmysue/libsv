@@ -1,5 +1,5 @@
-#ifndef __core_sv_image_h__
-#define __core_sv_image_h__
+#ifndef __libsv_sv_image_h__
+#define __libsv_sv_image_h__
 
 #include <stdlib.h>
 
@@ -92,4 +92,4 @@ void sv_image_str(const sv_image_t* image);
 #endif
 
 
-#endif  // __core_sv_image_h__
+#endif  // __libsv_sv_image_h__
