@@ -1,84 +1,98 @@
-/// codes below were copied from https://github.com/dmcrodrigues/macro-logger
-/// and I make some changes
-
 #ifndef __libsv_sv_log_h__
 #define __libsv_sv_log_h__
 
 #include <time.h>
 #include <string.h>
 
-#ifdef __ANDROID__
-#include <android/log.h>
-#endif
 
-#ifndef LOGTAG
-#define LOGTAG "libsv"
-#endif
 
-static inline char *timenow();
+#define SV_LOG_LEVEL_NONE   0x00
+#define SV_LOG_LEVEL_ERROR  0x01
+#define SV_LOG_LEVEL_INFO   0x02
+#define SV_LOG_LEVEL_DEBUG  0x03
+#define SV_NEW_LINE         "\n"
 
 #define _FILE strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__
 
-#define NO_LOG          0x00
-#define ERROR_LEVEL     0x01
-#define INFO_LEVEL      0x02
-#define DEBUG_LEVEL     0x03
+#ifndef SV_LOG_TAG
+#define SV_LOG_TAG "libsv"
+#endif
 
-#ifndef LOG_LEVEL
-#define LOG_LEVEL   DEBUG_LEVEL
+#ifndef SV_LOG_LEVEL
+#define SV_LOG_LEVEL   SV_LOG_LEVEL_DEBUG
 #endif
 
 #ifdef __ANDROID__
-// TODO android support
-#define PRINTFUNCTION(format, ...)     __android_log_print(ANDROID_LOG_INFO, LOGTAG, "My Log", 1); 
-#else
-#define PRINTFUNCTION(format, ...)      fprintf(stderr, format, __VA_ARGS__)
-#endif
 
-#define LOG_FMT             "%s | %-7s | %-15s | %s:%d | "
-#define LOG_ARGS(LOG_TAG)   timenow(), LOG_TAG, _FILE, __FUNCTION__, __LINE__
-
-#define NEWLINE     "\n"
-
-#define ERROR_TAG   "ERROR"
-#define INFO_TAG    "INFO"
-#define DEBUG_TAG   "DEBUG"
-
-#if LOG_LEVEL >= DEBUG_LEVEL
-#define LOG_DEBUG(message, args...)     PRINTFUNCTION(LOG_FMT message NEWLINE, LOG_ARGS(DEBUG_TAG), ## args)
-#else
-#define LOG_DEBUG(message, args...)
-#endif
-
-#if LOG_LEVEL >= INFO_LEVEL
-#define LOG_INFO(message, args...)      PRINTFUNCTION(LOG_FMT message NEWLINE, LOG_ARGS(INFO_TAG), ## args)
-#else
-#define LOG_INFO(message, args...)
-#endif
-
-#if LOG_LEVEL >= ERROR_LEVEL
-#define LOG_ERROR(message, args...)     PRINTFUNCTION(LOG_FMT message NEWLINE, LOG_ARGS(ERROR_TAG), ## args)
-#else
-#define LOG_ERROR(message, args...)
-#endif
-
-#if LOG_LEVEL >= NO_LOGS
-#define LOG_IF_ERROR(condition, message, args...) if (condition) PRINTFUNCTION(LOG_FMT message NEWLINE, LOG_ARGS(ERROR_TAG), ## args)
-#else
-#define LOG_IF_ERROR(condition, message, args...)
-#endif
-
-static inline char *timenow() {
-    static char buffer[64];
-    time_t rawtime;
-    struct tm *timeinfo;
+    #define SV_LOG_FMT  "| %-7s | %-15s | %s:%d | " 
+    #define SV_LOG_ARGS     _FILE, __FUNCTION__, __LINE__
+    #define SV_PRINT_FUNC(prio, format, ...) __android_log_print(prio, SV_LOG_TAG, SV_LOG_FMT format, SV_LOG_ARGS, __VAR_ARGS__)
     
-    time(&rawtime);
-    timeinfo = localtime(&rawtime);
-    
-    strftime(buffer, 64, "%Y-%m-%d %H:%M:%S", timeinfo);
-    
-    return buffer;
-}
+    #if SV_LOG_LEVEL >= SV_LOG_LEVEL_DEBUG
+        LOGD(format, ...) SV_PRINT_FUNC(ANDROID_LOG_DEBUG, format SV_NEW_LINE, __VA_ARGS__)
+    #else
+        LOGD(format, ...)
+    #endif
+
+    #if SV_LOG_LEVEL >= SV_LOG_LEVEL_INFO
+        LOGI(format, ...) SV_PRINT_FUNC(ANDROID_LOG_INFO, format SV_NEW_LINE, __VA_ARGS__)
+    #else
+        LOGI(format, ...)
+    #endif
+
+    #if SV_LOG_LEVEL >= SV_LOG_LEVEL_ERROR
+        LOGE(format, ...) SV_PRINT_FUNC(ANDROID_LOG_ERROR, format SV_NEW_LINE, __VA_ARGS__)
+    #else
+        LOGE(format, ...)
+    #endif
+
+#else  // __ANDROID__
+
+    static inline char *timenow();
+    #define SV_LEVEL_TAG_ERROR    "ERROR"
+    #define SV_LEVEL_TAG_INFO     "INFO"
+    #define SV_LEVEL_TAG_DEBUG    "DEBUG"
+    #define SV_LOG_FMT             "%s | %-5s | %-15s | %s:%d | "
+    #define SV_LOG_ARGS(tag)   timenow(), tag, _FILE, __FUNCTION__, __LINE__
+
+    #define SV_PRINT_FUNC(format, ... )      fprintf(stderr, format, __VA_ARGS__)
+
+    #if SV_LOG_LEVEL >= SV_LOG_LEVEL_DEBUG
+    #define LOGD(format, args...)   SV_PRINT_FUNC(SV_LOG_FMT format SV_NEW_LINE, SV_LOG_ARGS(SV_LEVEL_TAG_DEBUG), ##args)
+    #else
+    #define LOGD(format, args...)
+    #endif
+
+    #if SV_LOG_LEVEL >= SV_LOG_LEVEL_INFO
+    #define LOGI(format, args...)   SV_PRINT_FUNC(SV_LOG_FMT format SV_NEW_LINE, SV_LOG_ARGS(SV_LEVEL_TAG_INFO), ##args)
+    #else 
+    #define LOGI(format, args...)
+    #endif
+
+    #if SV_LOG_LEVEL >= SV_LOG_LEVEL_ERROR
+    #define LOGE(format, args...)    SV_PRINT_FUNC(SV_LOG_FMT format SV_NEW_LINE, SV_LOG_ARGS(SV_LEVEL_TAG_ERROR), ##args)
+    #else 
+    #define LOGE(format, args...)
+    #endif
+
+    static inline char *timenow()
+    {
+        static char buffer[64];
+        time_t rawtime;
+        struct tm *timeinfo;
+
+        time(&rawtime);
+        timeinfo = localtime(&rawtime);
+
+        strftime(buffer, 64, "%Y-%m-%d %H:%M:%S", timeinfo);
+
+        return buffer;
+    }
+#endif // __ANDROID__
 
 #endif // __libsv_sv_log_h__
+
+
+
+
+
