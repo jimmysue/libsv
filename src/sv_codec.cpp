@@ -14,12 +14,15 @@ extern "C" {
 }
 #endif
 
+#include "sv_log.h"
+
 
 sv_image_t * sv_imread_jpeg(const char* path)
 {
     FILE *file = fopen( path, "rb" );
     if ( file == NULL )
     {
+        LOGE("can't open image file: %s", path);
         return NULL;
     }
 
@@ -40,7 +43,7 @@ sv_image_t * sv_imread_jpeg(const char* path)
     int numChannels = info.num_components; // 3 = RGB, 4 = RGBA
     unsigned long dataSize = w * h * numChannels;
 
-    int format = numChannels == 3 ? SV_PIX_FMT_RGB888 : SV_PIX_FMT_RGBA8888;
+    sv_pix_fmt_t format = numChannels == 3 ? SV_PIX_FMT_RGB888 : SV_PIX_FMT_RGBA8888;
 
     sv_image_t* result = sv_image_create(w, h, format, 1);
 

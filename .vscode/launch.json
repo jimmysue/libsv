@@ -8,12 +8,13 @@
             "name": "(lldb) Launch",
             "type": "cppdbg",
             "request": "launch",
+            "preLaunchTask": "build",
             "program": "${workspaceFolder}/build/app/driver",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/workspace",
             "environment": [],
-            "externalConsole": true,
+            "externalConsole": false,
             "MIMode": "lldb"
         }
     ]

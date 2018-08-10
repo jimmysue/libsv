@@ -20,7 +20,7 @@ extern "C" {
 #define SV_GET_FMT_VBPP(fmt) ((fmt & 0x00ff0000) >> 16)
 
 
-enum{
+typedef enum{
     SV_PIX_FMT_GRAY8    = SV_MAKE_PIX_FMT(0, 8, 0, 0),
     SV_PIX_FMT_BGR888   = SV_MAKE_PIX_FMT(1, 24, 0, 0),
     SV_PIX_FMT_BGRA8888 = SV_MAKE_PIX_FMT(2, 32, 0, 0),        
@@ -29,7 +29,7 @@ enum{
     SV_PIX_FMT_J420     = SV_MAKE_PIX_FMT(5, 8, 2, 2), 
     SV_PIX_FMT_NV12     = SV_MAKE_PIX_FMT(6, 8, 4, 0),        
     SV_PIX_FMT_NV21     = SV_MAKE_PIX_FMT(7, 8, 4, 0),        // plane: 1; bbp: 32
-};
+}sv_pix_fmt_t;
 
 enum{
     SV_ORIENT_TL = 1, ///< Horizontal (normal)
@@ -42,33 +42,31 @@ enum{
     SV_ORIENT_LB = 8  ///< Rotate 270 CW
 };
 
-
-typedef struct {
+typedef struct
+{
     union {
-        uint8_t *data;
+        uint8_t *data = NULL;
         uint8_t *y;
     };
-    uint8_t *u;
-    uint8_t *v;
+    uint8_t *u = NULL;
+    uint8_t *v = NULL;
 
     union {
-        int stride;
+        int stride = NULL;
         int ystride;
     };
 
-    int ustride;
-    int vstride;
+    int ustride = NULL;
+    int vstride = NULL;
+    int width = 0;
+    int height = 0;
+    sv_pix_fmt_t format = SV_PIX_FMT_GRAY8;
+    int orient = 1;
+    int *refcount = NULL; ///< NULL for external data,
+                          ///< NonNULL for internal data
+} sv_image_t;
 
-    int             width   = 0;
-    int             height  = 0;
-    int            format   = SV_PIX_FMT_GRAY8;                          
-    int            orient   = 1;    
-    int           *refcount = NULL;    ///< NULL for external data, 
-                                       ///< NonNULL for internal data                  
-}sv_image_t;
-
-
-sv_image_t * sv_image_create(int width=0, int height=0, int fmt=SV_PIX_FMT_GRAY8, int orient=1);
+sv_image_t * sv_image_create(int width=0, int height=0, sv_pix_fmt_t fmt=SV_PIX_FMT_GRAY8, int orient=1);
 void         sv_image_destroy(sv_image_t* image);
 int          sv_image_size(const sv_image_t* image);
 int          sv_image_capacity(const sv_image_t * image);
@@ -78,12 +76,35 @@ void         sv_image_copyTo(const sv_image_t* src, sv_image_t* dst);
 void         sv_image_swap(sv_image_t* lhs, sv_image_t* rhs);
 
 sv_image_t * sv_image_rotate(const sv_image_t* image, int dst_orient);
-sv_image_t * sv_image_convert(const sv_image_t* image, int dst_fmt);
+sv_image_t * sv_image_convert(const sv_image_t* image, sv_pix_fmt_t dst_fmt);
 sv_image_t * sv_image_resize(const sv_image_t* image, int dst_width, int dst_height);
 sv_image_t * sv_image_roi(const sv_image_t* image, int x, int y, int width, int height);
 sv_image_t * sv_image_crop(const sv_image_t* image, int x, int y, int width, int height);
 sv_image_t * sv_image_warp(const sv_image_t* image, const float M[6], int width, int height);
 
+sv_image_t * sv_image_from_plane_1(int width, int height, sv_pix_fmt_t fmt, uint8_t* data, int stride, int orient = 1);
+sv_image_t * sv_image_from_plane_2(
+                    int width, int height, sv_pix_fmt_t fmt, 
+                    uint8_t* data, 
+                    int stride, 
+                    int orient = 1);
+
+#define sv_image_from_gray(width, height, data, stride...) \
+        sv_image_from_plane_1(width, height, SV_PIX_FMT_GRAY8, data, ## stride)
+
+#define sv_image_from_bgr(width, height, data, stride...) \
+        sv_image_from_plane_1(width, height, SV_PIX_FMT_BGR888, data, ## stride)
+
+#define sv_image_from_bgra(width, height, data, stride...) \
+        sv_image_from_plane_1(width, height, SV_PIX_FMT_BGRA8888, data, ## stride)
+
+#define sv_image_from_rgb(width, height, data, stride...) \
+        sv_image_from_plane_1(width, height, SV_PIX_FMT_RGB888, data, ## stride)
+
+#define sv_image_from_rgba(width, height, data, stride...) \
+        sv_image_from_plane_1(width, height, SV_PIX_FMT_RGBA8888, data, ## stride)
+
+const char*  sv_image_fmt_str(int fmt);
 
 void sv_image_str(const sv_image_t* image);
 

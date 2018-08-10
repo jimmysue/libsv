@@ -89,5 +89,3 @@ INSTALL ( DIRECTORY ${PROJECT_SOURCE_DIR}/include/		DESTINATION include )
 INCLUDE ( CM_linux_packages.cmake )
 
 list(APPEND DEPS_INCLUDE_DIRS ${ly_inc_dir})
-
-message(status "-->  ${DEPS_INCLUDE_DIRS}")

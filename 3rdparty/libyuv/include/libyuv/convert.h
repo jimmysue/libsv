@@ -242,6 +242,15 @@ int BGRAToI420(const uint8_t* src_bgra,
                int width,
                int height);
 
+// BGR little endian (rgb in memory) to I400.
+LIBYUV_API
+int BGR24ToI400(const uint8_t* src_abgr,
+               int src_stride_abgr,
+               uint8_t* dst_y,
+               int dst_stride_y,
+               int width,
+               int height); 
+
 // ABGR little endian (rgba in memory) to I420.
 LIBYUV_API
 int ABGRToI420(const uint8_t* src_abgr,
@@ -252,6 +261,15 @@ int ABGRToI420(const uint8_t* src_abgr,
                int dst_stride_u,
                uint8_t* dst_v,
                int dst_stride_v,
+               int width,
+               int height);
+
+// ABGR little endian (rgba in memory) to I400.
+LIBYUV_API
+int ABGRToI400(const uint8_t* src_abgr,
+               int src_stride_abgr,
+               uint8_t* dst_y,
+               int dst_stride_y,
                int width,
                int height);
 
@@ -278,6 +296,15 @@ int RGB24ToI420(const uint8_t* src_rgb24,
                 int dst_stride_u,
                 uint8_t* dst_v,
                 int dst_stride_v,
+                int width,
+                int height);
+
+// RGB little endian (bgr in memory) to I400.
+LIBYUV_API
+int RGB24ToI400(const uint8_t* src_rgb24,
+                int src_stride_rgb24,
+                uint8_t* dst_y,
+                int dst_stride_y,
                 int width,
                 int height);
 

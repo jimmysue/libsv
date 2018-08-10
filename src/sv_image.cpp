@@ -13,6 +13,8 @@ extern "C" {
 }  // extern "C"
 #endif
 
+#include "sv_log.h"
+
 #define ASSIGN_INFO(dst, src)   \
     dst->width = src->width;    \
     dst->height = src->height;  \
@@ -21,11 +23,12 @@ extern "C" {
 
 
 
-sv_image_t * sv_image_create(int width, int height, int fmt, int orient)
+sv_image_t * sv_image_create(int width, int height, sv_pix_fmt_t fmt, int orient)
 {
     sv_image_t * image = new (std::nothrow) sv_image_t;
 
     if(!image){
+        LOGE("failed allocing image struct");
         return nullptr;
     }
 
@@ -42,6 +45,7 @@ sv_image_t * sv_image_create(int width, int height, int fmt, int orient)
     unsigned char* data = new (std::nothrow) unsigned char [ysize + usize + vsize + sizeof(int)];
 
     if(!data){
+        LOGE("failed alloc pixel data: width=%d, height=%d, format=%s", width, height, sv_image_fmt_str(fmt));
         delete image;
         return nullptr;
     }
@@ -212,7 +216,41 @@ sv_image_t * sv_image_roi(const sv_image_t* image, int x, int y, int width, int 
     return result;
 }
 
+sv_image_t * sv_image_from_plane_1(int width, int height, sv_pix_fmt_t fmt, uint8_t* data, int stride, int orient)
+{
+    auto* res = new (std::nothrow) sv_image_t;
+    res->width = width;
+    res->height = height;
+    res->format = fmt;
+    res->data = data;
+    res->stride = stride;
+    res->orient = orient;
+    return res;
+}
+
 /// debug utilities
+
+const char*  sv_image_fmt_str(int fmt)
+{
+    static const char * fmt_names[] = {
+        "GRAY",
+        "BGR",
+        "BGRA",
+        "RGB",
+        "RGBA",
+        "J420",
+        "NV12",
+        "NV21"
+    };
+
+    int id = SV_GET_FMT_ID(fmt);
+    constexpr int num = sizeof(fmt_names) / sizeof(fmt_names[0]);
+    if (id >=0 && id < num){
+        return fmt_names[id];
+    }
+    return "Unknown Pixel Format";
+}
+
 
 void sv_image_str(const sv_image_t* image)
 {

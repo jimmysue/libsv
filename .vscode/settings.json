@@ -2,6 +2,15 @@
     "files.associations": {
         "ostream": "cpp",
         "ios": "cpp",
-        "__locale": "cpp"
-    }
+        "__locale": "cpp",
+        "istream": "cpp",
+        "array": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "vector": "cpp",
+        "iterator": "cpp",
+        "__config": "cpp",
+        "__nullptr": "cpp"
+    },
+    "C_Cpp.dimInactiveRegions": true
 }
