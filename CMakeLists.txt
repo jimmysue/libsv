@@ -40,3 +40,6 @@ target_link_libraries(
 # demo
 
 add_subdirectory(app)
+
+enable_testing()
+add_subdirectory(test)

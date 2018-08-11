@@ -1,0 +1,53 @@
+#ifndef __test_base_h__
+#define __test_base_h__
+
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+#cmakedefine CMAKE_SOURCE_DIR         "@CMAKE_SOURCE_DIR@"
+#cmakedefine CMAKE_CURRENT_BINARY_DIR "@CMAKE_CURRENT_BINARY_DIR@"
+#cmakedefine CMAKE_PROJECT_BINARY_DIR "@CMAKE_PROJECT_BINARY_DIR@"
+
+#define LIBSV_ASSERT_EQUAL(x, y)                                                                                                                                                                                                                          \
+    {                                                                                                                                                                                                                                                     \
+        if ((x) != (y))                                                                                                                                                                                                                                   \
+        {                                                                                                                                                                                                                                                 \
+            throw std::runtime_error(std::string(__FILE__) + std::string(":") + std::to_string(__LINE__) + std::string(" in ") + std::string(__PRETTY_FUNCTION__) + std::string(": ") + std::to_string((x)) + std::string(" != ") + std::to_string((y))); \
+        }                                                                                                                                                                                                                                                 \
+    }
+
+#define LIBSV_ASSERT_THROW(condition)                                                                                                                               \
+    {                                                                                                                                                               \
+        if (!(condition))                                                                                                                                           \
+        {                                                                                                                                                           \
+            throw std::runtime_error(std::string(__FILE__) + std::string(":") + std::to_string(__LINE__) + std::string(" in ") + std::string(__PRETTY_FUNCTION__)); \
+        }                                                                                                                                                           \
+    }
+
+#define LIBSV_EXPECT_EXCEPTION(expression, exception)                                                                                                               \
+    {                                                                                                                                                               \
+        try                                                                                                                                                         \
+        {                                                                                                                                                           \
+            (expression);                                                                                                                                           \
+        }                                                                                                                                                           \
+        catch (exception & e)                                                                                                                                       \
+        {                                                                                                                                                           \
+        }                                                                                                                                                           \
+        catch (...)                                                                                                                                                 \
+        {                                                                                                                                                           \
+            throw std::runtime_error(std::string(__FILE__) + std::string(":") + std::to_string(__LINE__) + std::string(" in ") + std::string(__PRETTY_FUNCTION__)); \
+        }                                                                                                                                                           \
+    }
+
+#define LIBSV_TEST_BEGIN(name)                                \
+    {                                                         \
+        std::cerr << "-- Running test \"" << name << "\"..."; \
+    }
+
+#define LIBSV_TEST_END()           \
+    {                              \
+        std::cerr << "finished\n"; \
+    }
+
+#endif // __test_base_h__

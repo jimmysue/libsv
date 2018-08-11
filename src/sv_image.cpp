@@ -1,5 +1,9 @@
 #include "libsv/sv_image.h"
 
+
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
 #include <memory>
 
 
@@ -229,6 +233,35 @@ sv_image_t * sv_image_from_plane_1(int width, int height, sv_pix_fmt_t fmt, uint
 }
 
 /// debug utilities
+
+int  sv_image_isEqual(const sv_image_t* lhs, const sv_image_t* rhs)
+{
+    int equal = 1;
+    equal = equal && (lhs->width == rhs->width);
+    equal = equal && lhs->height == rhs->height;
+    equal = equal && lhs->format == rhs->format;
+    equal = equal && lhs->orient == rhs->orient;
+
+    if ( !equal ){
+        return equal;
+    }
+    int ysize = SV_GET_FMT_YBPP(lhs->format) * lhs->width / 8;
+    int usize = SV_GET_FMT_UBPP(lhs->format) * lhs->width / 8;
+    int vsize = SV_GET_FMT_VBPP(lhs->format) * lhs->width / 8;
+
+    for(int y = 0; y < lhs->height; ++y){
+        const uint8_t * py = lhs->y;
+        const uint8_t * pu = lhs->u;
+        const uint8_t * pv = lhs->v;
+        const uint8_t * qy = rhs->y;
+        const uint8_t * qu = rhs->u;
+        const uint8_t * qv = rhs->v;
+        if( memcmp(py, qy, ysize) != 0 ) return 0;
+        if( memcmp(pu, qu, usize) != 0 ) return 0;
+        if( memcmp(pv, qv, vsize) != 0 ) return 0;
+    }
+    return 1;
+}
 
 const char*  sv_image_fmt_str(int fmt)
 {

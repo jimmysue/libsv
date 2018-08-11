@@ -52,12 +52,12 @@ typedef struct
     uint8_t *v = NULL;
 
     union {
-        int stride = NULL;
+        int stride = 0;
         int ystride;
     };
 
-    int ustride = NULL;
-    int vstride = NULL;
+    int ustride = 0;
+    int vstride = 0;
     int width = 0;
     int height = 0;
     sv_pix_fmt_t format = SV_PIX_FMT_GRAY8;
@@ -106,6 +106,7 @@ sv_image_t * sv_image_from_plane_2(
 
 const char*  sv_image_fmt_str(int fmt);
 
+int  sv_image_isEqual(const sv_image_t* lhs, const sv_image_t* rhs);
 void sv_image_str(const sv_image_t* image);
 
 #ifdef __cplusplus

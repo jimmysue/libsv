@@ -10,7 +10,11 @@
         "vector": "cpp",
         "iterator": "cpp",
         "__config": "cpp",
-        "__nullptr": "cpp"
+        "__nullptr": "cpp",
+        "__bit_reference": "cpp",
+        "algorithm": "cpp",
+        "iostream": "cpp",
+        "bitset": "cpp"
     },
     "C_Cpp.dimInactiveRegions": true
 }
