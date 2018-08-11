@@ -22,10 +22,10 @@ extern "C" {
 
 typedef enum{
     SV_PIX_FMT_GRAY8    = SV_MAKE_PIX_FMT(0, 8, 0, 0),
-    SV_PIX_FMT_BGR888   = SV_MAKE_PIX_FMT(1, 24, 0, 0),
-    SV_PIX_FMT_BGRA8888 = SV_MAKE_PIX_FMT(2, 32, 0, 0),        
-    SV_PIX_FMT_RGB888   = SV_MAKE_PIX_FMT(3, 24, 0, 0),        
-    SV_PIX_FMT_RGBA8888 = SV_MAKE_PIX_FMT(4, 32, 0, 0),        
+    SV_PIX_FMT_BGR   = SV_MAKE_PIX_FMT(1, 24, 0, 0),
+    SV_PIX_FMT_BGRA = SV_MAKE_PIX_FMT(2, 32, 0, 0),        
+    SV_PIX_FMT_RGB   = SV_MAKE_PIX_FMT(3, 24, 0, 0),        
+    SV_PIX_FMT_RGBA = SV_MAKE_PIX_FMT(4, 32, 0, 0),        
     SV_PIX_FMT_J420     = SV_MAKE_PIX_FMT(5, 8, 2, 2), 
     SV_PIX_FMT_NV12     = SV_MAKE_PIX_FMT(6, 8, 4, 0),        
     SV_PIX_FMT_NV21     = SV_MAKE_PIX_FMT(7, 8, 4, 0),        // plane: 1; bbp: 32
@@ -93,16 +93,16 @@ sv_image_t * sv_image_from_plane_2(
         sv_image_from_plane_1(width, height, SV_PIX_FMT_GRAY8, data, ## stride)
 
 #define sv_image_from_bgr(width, height, data, stride...) \
-        sv_image_from_plane_1(width, height, SV_PIX_FMT_BGR888, data, ## stride)
+        sv_image_from_plane_1(width, height, SV_PIX_FMT_BGR, data, ## stride)
 
 #define sv_image_from_bgra(width, height, data, stride...) \
-        sv_image_from_plane_1(width, height, SV_PIX_FMT_BGRA8888, data, ## stride)
+        sv_image_from_plane_1(width, height, SV_PIX_FMT_BGRA, data, ## stride)
 
 #define sv_image_from_rgb(width, height, data, stride...) \
-        sv_image_from_plane_1(width, height, SV_PIX_FMT_RGB888, data, ## stride)
+        sv_image_from_plane_1(width, height, SV_PIX_FMT_RGB, data, ## stride)
 
 #define sv_image_from_rgba(width, height, data, stride...) \
-        sv_image_from_plane_1(width, height, SV_PIX_FMT_RGBA8888, data, ## stride)
+        sv_image_from_plane_1(width, height, SV_PIX_FMT_RGBA, data, ## stride)
 
 const char*  sv_image_fmt_str(int fmt);
 

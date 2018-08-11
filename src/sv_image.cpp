@@ -256,11 +256,11 @@ void sv_image_str(const sv_image_t* image)
 {
     const char* fmt_str = NULL;
     switch(image->format){
-        case SV_PIX_FMT_BGR888: fmt_str = "BGR888"; break;
-        case SV_PIX_FMT_BGRA8888: fmt_str = "BGRA8888"; break;
+        case SV_PIX_FMT_BGR: fmt_str = "BGR"; break;
+        case SV_PIX_FMT_BGRA: fmt_str = "BGRA"; break;
         case SV_PIX_FMT_GRAY8: fmt_str = "GRAY8"; break;
-        case SV_PIX_FMT_RGB888: fmt_str = "RGB888"; break;
-        case SV_PIX_FMT_RGBA8888: fmt_str = "RGBA8888"; break;
+        case SV_PIX_FMT_RGB: fmt_str = "RGB"; break;
+        case SV_PIX_FMT_RGBA: fmt_str = "RGBA"; break;
         case SV_PIX_FMT_J420: fmt_str = "J420"; break;
         case SV_PIX_FMT_NV12: fmt_str = "NV12"; break;
         case SV_PIX_FMT_NV21: fmt_str = "NV21"; break;

@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 
     sv_image_t* gray = sv_image_from_gray(cvgray.cols, cvgray.rows, cvgray.data, cvgray.cols);
 
-    sv_image_t * graytorgb = sv_image_convert(gray, SV_PIX_FMT_RGB888);
+    sv_image_t * graytorgb = sv_image_convert(gray, SV_PIX_FMT_RGB);
     sv_image_t * graytonv  = sv_image_convert(gray, SV_PIX_FMT_NV12);
     cv::Mat cvrgb(image->height, image->width, CV_8UC(components), graytorgb->data);
 
