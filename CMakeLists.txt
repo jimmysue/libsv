@@ -22,10 +22,12 @@ include_directories(
 
 file(GLOB SV_SOURCES
     src/*.c*
+    src/codec/*.cpp
 )
 
 file(GLOB SV_HEADERS
     src/*.h*
+    src/codec/*.h
 )
 
 

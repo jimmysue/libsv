@@ -15,6 +15,7 @@ extern "C" {
 #endif
 
 #include "sv_log.h"
+#include "codec/sv_codec_base.h"
 
 
 sv_image_t * sv_imread_jpeg(const char* path)
@@ -66,5 +67,6 @@ sv_image_t * sv_imread_jpeg(const char* path)
 
 sv_image_t * sv_imread(const char* filename)
 {
+    LOGD("codec length: %d", libsv::CodecRegistry::decoders().size());
     return sv_imread_jpeg(filename);
 }
